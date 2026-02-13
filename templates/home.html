@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Projet2 - Images</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>Galerie</h1>
+    </header>
+
+    <div class="layout">
+
+        <!-- MENU GAUCHE -->
+        <aside class="sidebar">
+            <h2>Réglages</h2>
+
+            <a href="/?action=select" style="text-decoration: none;">
+                <button type="button" style="background: #2563eb; margin-bottom: 1.5rem;">
+                    📁 Sélectionner une image
+                </button>
+            </a>
+
+            {% if selected_path %}
+            <form method="GET" action="/">
+                <label>Fichier actuel :</label>
+                <p style="font-size: 0.8rem; word-break: break-all; color: #64748b; margin-bottom: 1rem;">
+                    {{ filename }}
+                </p>
+
+                <label for="algo">Algorithme</label>
+                <select id="algo" name="algo">
+                    <option value="original" {% if algo=="original" %}selected{% endif %}>Original</option>
+                    <option value="kmeans" {% if algo=="kmeans" %}selected{% endif %}>KMeans (Couleurs)</option>
+                </select>
+
+                <label for="k">Nombre de couleurs (K)</label>
+                <input type="number" id="k" name="k" min="2" max="32" value="{{ k }}">
+
+                <button type="submit">Appliquer</button>
+            </form>
+            {% endif %}
+        </aside>
+
+        <main class="content">
+            <h2>Affichage</h2>
+            {% if selected_path %}
+            <div class="viewer">
+                <img src="{{ url_for('photo', algo=algo, k=k) }}" alt="Image">
+                <p class="caption">Source : {{ filename }}</p>
+            </div>
+            {% else %}
+            <p class="muted">Cliquez sur le bouton bleu pour choisir une image sur votre ordinateur.</p>
+            {% endif %}
+        </main>
+
+    </div>
+
+</body>
+
+</html>
